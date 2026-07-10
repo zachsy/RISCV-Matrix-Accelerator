@@ -1,4 +1,5 @@
 # Ignore compiled simulation files
-sim
+sim/*
+!sim/.gitkeep
 # Ignore waveform files
 *.vcd
