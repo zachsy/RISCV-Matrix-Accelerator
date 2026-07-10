@@ -42,20 +42,22 @@ module tb_alu();
 
     always @(negedge clk)
         if (~reset) begin
-            if (result !== expected_result) begin
-                $display("Error: inputs %b", {a, b, alu_control});
-                $display(" outputs = %b (%b expected)", result, expected_result);
-                errors <= errors + 1;
-            end
-            if (zero !== expected_zero) begin
-                $display("Error: inputs %b", {a, b, alu_control});
-                $display(" outputs = %b (%b expected)", zero, expected_zero);
-                errors <= errors + 1;
-            end
-            vectornum <= vectornum + 1;
             if (vectornum == 1250) begin
                 $display ("%d tests completed with %d errors", vectornum, errors);
                 $finish;
+            end
+            else begin
+                if (result !== expected_result) begin
+                    $display("Error: a = %h, b = %h, alu_control=%b", a, b, alu_control);
+                    $display(" outputs = %b (%b expected)", result, expected_result);
+                    errors <= errors + 1;
+                end
+                if (zero !== expected_zero) begin
+                    $display("Error: a = %h, b = %h, alu_control=%b", a, b, alu_control);
+                    $display(" outputs = %b (%b expected)", zero, expected_zero);
+                    errors <= errors + 1;
+                end
+                vectornum <= vectornum + 1;
             end
         end
 endmodule
