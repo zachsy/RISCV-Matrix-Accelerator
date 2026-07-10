@@ -35,7 +35,8 @@ module tb_alu();
     end
 
     always @(posedge clk) begin
-        #1; {a, b, alu_control, expected_result, expected_zero} <= testvectors[vectornum][103:3];
+        #1; {a, b, alu_control, expected_result} <= testvectors[vectornum][103:4];
+        expected_zero <= testvectors[vectornum][0];
 
     end
 
