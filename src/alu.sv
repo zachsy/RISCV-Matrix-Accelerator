@@ -12,15 +12,14 @@ module alu (
             4'b0111:    result = a & b;
             4'b0110:    result = a | b;
             4'b0100:    result = a ^ b;
-            4'b0001:    result = // SLL
-            4'b0101:    result = // SRL
-            4'b1101:    result = // SRA
-            4'b0010:    result = // SLT
-            4'b0011:    result = // SLTU
-
+            4'b0001:    result = a << b[4:0];
+            4'b0101:    result = a >> b[4:0];
+            4'b1101:    result = signed'(a) >>> b[4:0];
+            4'b0010:    result = signed'(a) < signed'(b) ? 1 : 0;
+            4'b0011:    result = a < b ? 1 : 0;
             default: result = 32'b0000;
         endcase
     end
     
-    assign zero = (result == 32'b0)
+    assign zero = (result == 32'b0);
 endmodule
