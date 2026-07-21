@@ -15,10 +15,9 @@ module regfile (
     assign rd2 = (a2 == 0) ? 32'b0 : rf[a2];
 
     always_ff @(posedge clk) begin
-        if (we3 == 1) begin
+        if (we3 == 1 && a3 != 0) begin
             rf[a3] <= wd3;
         end
     end
-    //TODO: Synchronous Write (Writing wd3 into a3)
 
 endmodule
