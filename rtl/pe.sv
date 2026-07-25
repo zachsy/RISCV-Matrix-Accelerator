@@ -28,10 +28,19 @@ module pe (
 
     // MAC Math
     logic [31:0] next_sum;
-    always_comb begin
-        next_sum = (a_in * weight_reg) + sum_in;
-    end 
+        assign next_sum = (a_in * weight_reg) + sum_in;
 
+    // Systolic Pipeline
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            a_out   <= 8'b0;
+            sum_out <= 32'b0;
+        end 
+        else begin 
+            a_out <= a_in;
+            sum_out <= next_sum;
+        end
+    end
 
 
 endmodule
