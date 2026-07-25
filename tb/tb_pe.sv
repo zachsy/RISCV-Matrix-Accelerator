@@ -20,3 +20,26 @@ module tb_pe();
     always begin
         clk = 1; #5; clk = 0; #5;
     end
+
+    initial begin
+        $dumpfile("pe_waves.vcd");
+        $dumpvars(0, tb_pe);
+
+        reset = 1; load_weight = 0;
+        a_in = 0; weight_in = 0; sum_in = 0;
+
+        #20; reset = 0;
+
+        #10;
+        load_weight = 1;
+        weight_in = 8'd23;
+
+        #10;
+        load_weight = 0;
+        a_in = 8'd12;
+        sum_in = 8'd200;
+
+        #20;
+        $finish;
+    end
+endmodule
