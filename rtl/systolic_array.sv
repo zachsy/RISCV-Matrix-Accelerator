@@ -28,6 +28,7 @@ module systolic_array_4x4 #(
         for (c = 0; c < N; c++) begin
             assign sum_wire[0][c] = sum_in[c];
             assign sum_out[c] = sum_wire[N][c];
+            assign weight_wire[0][c] = weight_in[c];
         end
 
         for (r = 0; r < N; r++) begin : row
@@ -36,11 +37,11 @@ module systolic_array_4x4 #(
                     .clk         (clk),
                     .reset       (reset),
                     .load_weight (load_weight),
-                    .a_in        (a_wire[r][c]),
-                    .sum_in      (sum_wire[r][c]),
                     .weight_in   (weight_wire[r][c]),
-                    .weight_out  (weight_wire[r + 1][c])
+                    .weight_out  (weight_wire[r + 1][c]),
+                    .a_in        (a_wire[r][c]),
                     .a_out       (a_wire[r][c + 1]),
+                    .sum_in      (sum_wire[r][c]),
                     .sum_out     (sum_wire[r + 1][c])
                 );
             end
