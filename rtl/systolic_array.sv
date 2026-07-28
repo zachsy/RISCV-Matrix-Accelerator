@@ -24,6 +24,8 @@ module systolic_array_4x4 #(
     generate
         for(r = 0; r < N; r++) begin
             assign a_wire[r][0] = a_in[r];
+            assign a_out[r] = a_wire[r][N];
+
         end
         for (c = 0; c < N; c++) begin
             assign sum_wire[0][c] = sum_in[c];
