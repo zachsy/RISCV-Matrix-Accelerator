@@ -44,7 +44,7 @@ module systolic_array #(
                     .a_in        (a_wire[r][c]),
                     .a_out       (a_wire[r][c + 1]),
                     .sum_in      (sum_wire[r][c]),
-                    .sum_out     (sum_wire[r + 1][c])
+                    .sum_out     (sum_wire[r + 1][c]),
                 );
             end
         end
