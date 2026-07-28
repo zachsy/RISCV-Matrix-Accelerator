@@ -1,4 +1,4 @@
-module systolic_array_4x4 #(
+module systolic_array #(
     parameter int N = 4
 ) (
     input  logic               clk,
