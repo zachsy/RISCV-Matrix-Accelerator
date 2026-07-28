@@ -16,8 +16,9 @@ module systolic_array_4x4 #(
     output logic [7:0]    a_out     [N],   // Passed out the right side
     output logic [31:0]   sum_out   [N]  // The final matrix answers out the bottom
 );
-    logic [7:0] a_wire      [N][N + 1];
-    logic [31:0] sum_wire    [N + 1][N];
+    logic [7:0]     a_wire      [N][N + 1];
+    logic [31:0]    sum_wire    [N + 1][N];
+    logic [7:0]     weight_wire [N + 1][N];
 
     genvar r, c;
     generate
@@ -27,5 +28,21 @@ module systolic_array_4x4 #(
         for (c = 0; c < N; c++) begin
             assign sum_wire[0][c] = sum_in[c];
             assign sum_out[c] = sum_wire[N][c];
+        end
+
+        for (r = 0; r < N; r++) begin : row
+            for (c = 0; c < N; c++) begin : col
+                pe pe_inst (
+                    .clk         (clk),
+                    .reset       (reset),
+                    .load_weight (load_weight),
+                    .a_in        (a_wire[r][c]),
+                    .sum_in      (sum_wire[r][c]),
+                    .weight_in   (weight_wire[r][c]),
+                    .weight_out  (weight_wire[r + 1][c])
+                    .a_out       (a_wire[r][c + 1]),
+                    .sum_out     (sum_wire[r + 1][c])
+                );
+            end
         end
     endgenerate

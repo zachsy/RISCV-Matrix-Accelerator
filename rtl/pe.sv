@@ -9,6 +9,7 @@ module pe (
     input  logic [31:0] sum_in,
     input  logic [7:0]  weight_in,
     
+    output logic [7:0]  weight_out,
     output logic [7:0]  a_out,
     output logic [31:0] sum_out
 );
@@ -41,6 +42,8 @@ module pe (
             sum_out <= next_sum;
         end
     end
+    
+    assign weight_out = weight_reg;
 
 
 endmodule
