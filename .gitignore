@@ -3,3 +3,5 @@ sim/*
 !sim/.gitkeep
 # Ignore waveform files
 *.vcd
+
+.venv
