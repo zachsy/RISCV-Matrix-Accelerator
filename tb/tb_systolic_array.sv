@@ -31,11 +31,11 @@ module tb_systolic_array();
 
     // Reset + init
     initial begin
-        $readmemh("A.tv", A_mat);
-        $readmemh("W.tv", W_mat);
-        $readmemh("C.tv", C_expected);
+        $readmemh("sim/A.tv", A_mat);
+        $readmemh("sim/W.tv", W_mat);
+        $readmemh("sim/C.tv", C_expected);
 
-        $dumpfile("systolic_waves.vcd");
+        $dumpfile("sim/systolic_waves.vcd");
         $dumpvars(0, tb_systolic_array);
 
         sum_in = '{default:0};

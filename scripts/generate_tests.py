@@ -27,7 +27,7 @@ edge_cases = [
     0x80000000,  
 ]
 
-with open("alu_tests.tv", "w") as file:
+with open("sim/alu_tests.tv", "w") as file:
     available_ops = list(opcodes.keys())
     total_vectors = 0
     

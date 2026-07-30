@@ -25,9 +25,9 @@ module tb_alu();
     end
 
     initial begin
-        $readmemh("alu_tests.tv", testvectors); 
+        $readmemh("sim/alu_tests.tv", testvectors); 
 
-        $dumpfile("waves.vcd");
+        $dumpfile("sim/waves.vcd");
         $dumpvars(0, tb_alu);
 
         vectornum = 0; errors = 0;

@@ -22,7 +22,7 @@ module tb_pe();
     end
 
     initial begin
-        $dumpfile("pe_waves.vcd");
+        $dumpfile("sim/pe_waves.vcd");
         $dumpvars(0, tb_pe);
 
         reset = 1; load_weight = 0;

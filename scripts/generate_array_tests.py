@@ -2,9 +2,9 @@ import numpy as np
 
 
 arraySize = 4
-num_tests = 1
+num_tests = 1000
 
-with open("A.tv", "w") as fa, open("W.tv", "w") as fw, open("C.tv", "w") as fc:
+with open("sim/A.tv", "w") as fa, open("sim/W.tv", "w") as fw, open("sim/C.tv", "w") as fc:
     total_tests = 0
 
 
