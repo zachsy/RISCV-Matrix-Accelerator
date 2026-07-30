@@ -4,7 +4,7 @@ import numpy as np
 arraySize = 4
 num_tests = 1
 
-with open("systolic_array_tests.tv", "w") as file:
+with open("A.tv", "w") as fa, open("W.tv", "w") as fw, open("C.tv", "w") as fc:
     total_tests = 0
 
 
@@ -20,7 +20,16 @@ with open("systolic_array_tests.tv", "w") as file:
 
         c_hex = " ".join([f"{(val & 0xFF):08x}" for val in c.flatten()])
 
-        file.write(f"{a_hex} {w_hex} {c_hex}\n")
+        for val in a.flatten():
+            fa.write(f"{val & 0xFF:02x} ")
+        fa.write("\n")
+        for val in w.flatten():
+            fw.write(f"{val & 0xFF:02x} ")
+        fw.write("\n")
+        for val in c.flatten():
+            fc.write(f"{val & 0xFFFFFFFF:08x} ")
+        fc.write("\n")
+
         total_tests += 1
 
-print(f"Successfully generated {total_tests} signed test vectors!")
+print(f"Successfully generated {total_tests} matrices!")
