@@ -15,11 +15,6 @@ with open("sim/A.tv", "w") as fa, open("sim/W.tv", "w") as fw, open("sim/C.tv", 
 
         c = a @ w
 
-        a_hex = " ".join([f"{(val & 0xFF):02x}" for val in a.flatten()])
-        w_hex = " ".join([f"{(val & 0xFF):02x}" for val in w.flatten()])
-
-        c_hex = " ".join([f"{(val & 0xFF):08x}" for val in c.flatten()])
-
         for val in a.flatten():
             fa.write(f"{val & 0xFF:02x} ")
         fa.write("\n")
