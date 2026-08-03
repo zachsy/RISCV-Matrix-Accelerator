@@ -29,8 +29,10 @@ module systolic_array #(
         else begin
             for (int r = 0; r < N; r++) begin
                 skew_reg[r][0] <= a_in[r];
-                for (int s = 1; s < r; s++) begin
-                    skew_reg[r][s] <= skew_reg[r][s-1];
+                for (int s = 1; s < N; s++) begin
+                    if (s < r) begin
+                        skew_reg[r][s] <= skew_reg[r][s-1];
+                    end
                 end
             end
         end
@@ -73,3 +75,5 @@ module systolic_array #(
             end
         end
     endgenerate
+
+endmodule
