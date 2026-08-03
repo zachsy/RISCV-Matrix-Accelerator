@@ -29,7 +29,7 @@ module pe (
 
     // MAC Math
     logic [31:0] next_sum;
-        assign next_sum = (a_in * weight_reg) + sum_in;
+        assign next_sum = ($signed(a_in) * $signed(weight_reg)) + $signed(sum_in);
 
     // Systolic Pipeline
     always_ff @(posedge clk) begin
