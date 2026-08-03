@@ -38,12 +38,15 @@ module tb_systolic_array();
         $dumpfile("sim/systolic_waves.vcd");
         $dumpvars(0, tb_systolic_array);
 
-        sum_in = '{default:0};
+        for (int i = 0; i < N; i++) begin
+            sum_in[i] = 32'd0;
+        end
         cycle = 0; errors = 0;
         reset = 1; load_weight = 0;
         #22; reset = 0;
     end
 
+    // Driver
     always @(posedge clk) begin
         if (~reset) begin
             if (cycle < N) begin
@@ -62,9 +65,37 @@ module tb_systolic_array();
                     a_in[r] <= 8'b0;
                 end
             end
-
-
             cycle <= cycle + 1;
+        end
+    end
+
+    // Scoreboard
+    always @(negedge clk) begin
+        if (~reset) begin
+            if (cycle >= 2*N && cycle < 4*N - 1) begin 
+                for (int c = 0; c < N; c++) begin
+                    int r;
+                    r = cycle - 2*N - c;
+                    if (r >= 0 && r < N) begin
+                        if (sum_out[c] !== C_expected[r][c]) begin
+                            $display("Error at Cycle %0d: Row %0d, Col %0d", cycle, r, c);
+                            $display("  Expected: %h", C_expected[r][c]);
+                            $display("  Got:      %h", sum_out[c]);
+                            errors = errors + 1;
+                        end
+                    end
+                end
+
+                //End of simulation check
+                if (cycle == 4*N - 2) begin
+                    if (errors == 0)
+                        $display("SUCCESS: All %0d tests completed perfectly!", cycle);
+                    else
+                        $display("FAILURE: %0d tests completed with %0d errors.", cycle, errors);
+                    
+                    $finish;
+                end
+            end
         end
     end
 
