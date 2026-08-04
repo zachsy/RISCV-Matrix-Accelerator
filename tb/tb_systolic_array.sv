@@ -1,6 +1,7 @@
 module tb_systolic_array();
 
     localparam int N = 4;
+    localparam int num_tests = 1000;
 
     logic               clk, reset, load_weight;
     logic [7:0]         a_in      [N];
@@ -12,11 +13,12 @@ module tb_systolic_array();
 
     integer             cycle;
     integer             errors;
+    integer             test;
 
     // Golden-model storage
-    logic [7:0]         A_mat        [N][N];
-    logic [7:0]         W_mat        [N][N];
-    logic [31:0]        C_expected   [N][N];
+    logic [7:0]         A_mat        [num_tests][N][N];
+    logic [7:0]         W_mat        [num_tests][N][N];
+    logic [31:0]        C_expected   [num_tests][N][N];
 
     systolic_array #(.N(N)) dut (
         .clk(clk), .reset(reset), .load_weight(load_weight),
@@ -41,7 +43,8 @@ module tb_systolic_array();
         for (int i = 0; i < N; i++) begin
             sum_in[i] = 32'd0;
         end
-        cycle = 0; errors = 0;
+
+        cycle = 0; errors = 0; test = 0;
         reset = 1; load_weight = 0;
         #22; reset = 0;
     end
@@ -52,12 +55,12 @@ module tb_systolic_array();
             if (cycle < N) begin
                 load_weight <= 1;
                 for (int c = 0; c < N; c++)
-                    weight_in[c] <= W_mat[N-1-cycle][c];
+                    weight_in[c] <= W_mat[test][N-1-cycle][c];
             end
             else if (cycle < 2*N) begin
                 load_weight <= 0;
                 for (int r = 0; r < N; r++)
-                    a_in[r] <= A_mat[cycle - N][r];
+                    a_in[r] <= A_mat[test][cycle - N][r];
             end
             else begin
                 load_weight <= 0;
@@ -71,26 +74,32 @@ module tb_systolic_array();
     // Scoreboard
     always @(negedge clk) begin
         if (~reset) begin
-            if (cycle >= 2*N - 1 && cycle <= 4*N - 2) begin
+            if (cycle >= 2*N + 1 && cycle <= 4*N - 1) begin
                 for (int c = 0; c < N; c++) begin
                     int r;
-                    r = cycle - (23*N - 1) - c;
+                    r = cycle - (2*N + 1) - c;
                     if (r >= 0 && r < N) begin
-                        if (sum_out[c] !== C_expected[r][c]) begin
-                            $display("Error at Cycle %0d: Row %0d, Col %0d", cycle, r, c);
-                            $display("  Expected: %h", C_expected[r][c]);
+                        if (sum_out[c] !== C_expected[test][r][c]) begin
+                            $display("Error at Test %0d, Cycle %0d: Row %0d, Col %0d", test, cycle, r, c);
+                            $display("  Expected: %h", C_expected[test][r][c]);
                             $display("  Got:      %h", sum_out[c]);
                             errors = errors + 1;
                         end
                     end
                 end
 
-                if (cycle == 4*N - 2) begin
-                    if (errors == 0)
-                        $display("SUCCESS: All tests completed perfectly!");
-                    else
-                        $display("FAILURE: completed with %0d errors.", errors);
-                    $finish;
+                if (cycle == 4*N - 1) begin
+                    if(test == num_tests - 1) begin
+                        if (errors == 0)
+                            $display("SUCCESS: All tests completed perfectly!");
+                        else
+                            $display("FAILURE: completed with %0d errors.", errors);
+                        $finish;
+                    end
+                    else begin
+                        test <= test + 1;
+                        cycle <= 0;
+                    end
                 end
             end
         end
