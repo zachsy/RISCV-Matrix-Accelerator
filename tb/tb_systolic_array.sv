@@ -51,19 +51,18 @@ module tb_systolic_array();
         if (~reset) begin
             if (cycle < N) begin
                 load_weight <= 1;
-                for(int c = 0; c < N; c++) begin
+                for (int c = 0; c < N; c++)
                     weight_in[c] <= W_mat[N-1-cycle][c];
-                end
-            end 
-            else if (cycle >=N && cycle < 2*N) begin
-                for (int r = 0; r < N; r++) begin
-                    a_in[r] <= A_mat[r][cycle - N];
-                end
+            end
+            else if (cycle < 2*N) begin
+                load_weight <= 0;
+                for (int r = 0; r < N; r++)
+                    a_in[r] <= A_mat[cycle - N][r];
             end
             else begin
-                for (int r = 0; r < N; r++) begin
+                load_weight <= 0;
+                for (int r = 0; r < N; r++)
                     a_in[r] <= 8'b0;
-                end
             end
             cycle <= cycle + 1;
         end
@@ -72,10 +71,10 @@ module tb_systolic_array();
     // Scoreboard
     always @(negedge clk) begin
         if (~reset) begin
-            if (cycle >= 2*N && cycle < 4*N - 1) begin 
+            if (cycle >= 2*N - 1 && cycle <= 4*N - 2) begin
                 for (int c = 0; c < N; c++) begin
                     int r;
-                    r = cycle - 2*N - c;
+                    r = cycle - (23*N - 1) - c;
                     if (r >= 0 && r < N) begin
                         if (sum_out[c] !== C_expected[r][c]) begin
                             $display("Error at Cycle %0d: Row %0d, Col %0d", cycle, r, c);
@@ -86,13 +85,11 @@ module tb_systolic_array();
                     end
                 end
 
-                //End of simulation check
                 if (cycle == 4*N - 2) begin
                     if (errors == 0)
-                        $display("SUCCESS: All %0d tests completed perfectly!", cycle);
+                        $display("SUCCESS: All tests completed perfectly!");
                     else
-                        $display("FAILURE: %0d tests completed with %0d errors.", cycle, errors);
-                    
+                        $display("FAILURE: completed with %0d errors.", errors);
                     $finish;
                 end
             end
