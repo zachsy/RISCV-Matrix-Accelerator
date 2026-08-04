@@ -12,6 +12,7 @@ module tb_systolic_array();
 
 
     integer             cycle;
+    integer             total_cycles;
     integer             errors;
     integer             test;
 
@@ -45,7 +46,7 @@ module tb_systolic_array();
         end
 
         cycle = 0; errors = 0; test = 0;
-        reset = 1; load_weight = 0;
+        reset = 1; load_weight = 0; total_cycles = 0;
         #22; reset = 0;
     end
 
@@ -68,6 +69,7 @@ module tb_systolic_array();
                     a_in[r] <= 8'b0;
             end
             cycle <= cycle + 1;
+            total_cycles <= total_cycles + 1;
         end
     end
 
@@ -90,6 +92,7 @@ module tb_systolic_array();
 
                 if (cycle == 4*N - 1) begin
                     if(test == num_tests - 1) begin
+                        $display("%0d Total cycles completed. %0d Cycles-per-matrix", total_cycles, total_cycles/num_tests);
                         if (errors == 0)
                             $display("SUCCESS: All tests completed perfectly!");
                         else
