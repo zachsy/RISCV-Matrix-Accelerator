@@ -1,23 +1,26 @@
 module systolic_array #(
-    parameter int N = 4
+    parameter int N = 4,        // Size of array
+    parameter int DATA_W = 8,   // Width of A and W 
+    parameter int SUM_W = 32    // Width of accumulated sum
+
 ) (
     input  logic               clk,
     input  logic               reset,
     input  logic               load_weight,
     
     // Matrix A Inputs (Flowing in from the left)
-    input  logic [7:0]    a_in      [N],    
+    input  logic [DATA_W-1:0]       a_in      [N],    
     
     // Matrix W Inputs / Partial Sums (Flowing in from the top)
-    input  logic [31:0]   sum_in    [N],  
-    input  logic [7:0]    weight_in [N], 
+    input  logic [SUM_W-1:0]        sum_in    [N],  
+    input  logic [DATA_W-1:0]       weight_in [N], 
     
     // Outputs (Flowing out the right and bottom)
-    output logic [7:0]    a_out     [N],   // Passed out the right side
-    output logic [31:0]   sum_out   [N]  // The final matrix answers out the bottom
+    output logic [DATA_W-1:0]       a_out     [N],   // Passed out the right side
+    output logic [SUM_W-1:0]        sum_out   [N]  // The final matrix answers out the bottom
 );
 
-    logic [7:0] skew_reg [N][N-1 ];
+    logic [DATA_W-1:0] skew_reg [N][N - 1];
     always_ff @(posedge clk) begin
         if (reset) begin
             for (int r = 0; r < N; r++) begin
@@ -39,9 +42,9 @@ module systolic_array #(
     end
 
 
-    logic [7:0]     a_wire      [N][N + 1];
-    logic [31:0]    sum_wire    [N + 1][N];
-    logic [7:0]     weight_wire [N + 1][N];
+    logic [DATA_W-1:0]     a_wire      [N][N + 1];
+    logic [SUM_W-1:0]    sum_wire    [N + 1][N];
+    logic [DATA_W-1:0]     weight_wire [N + 1][N];
 
     assign a_wire[0][0] = a_in[0];
     genvar r, c;

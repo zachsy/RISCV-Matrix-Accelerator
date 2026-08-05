@@ -1,26 +1,30 @@
-module pe (
+module pe #(
+    parameter int DATA_W = 8,   // Width of A and W 
+    parameter int SUM_W = 32    // Width of accumulated sum
+
+)   (
     input  logic        clk,
     input  logic        reset,
     
     // Control Signal
     input  logic        load_weight, 
     
-    input  logic [7:0]  a_in,
-    input  logic [31:0] sum_in,
-    input  logic [7:0]  weight_in,
+    input  logic [DATA_W-1:0]  a_in,
+    input  logic [SUM_W-1:0] sum_in,
+    input  logic [DATA_W-1:0]  weight_in,
     
-    output logic [7:0]  weight_out,
-    output logic [7:0]  a_out,
-    output logic [31:0] sum_out
+    output logic [DATA_W-1:0]  weight_out,
+    output logic [DATA_W-1:0]  a_out,
+    output logic [SUM_W-1:0] sum_out
 );
 
 
-    logic [7:0] weight_reg;
+    logic [DATA_W-1:0] weight_reg;
     
     // Weight Loader
     always_ff @(posedge clk) begin
         if (reset) begin
-            weight_reg <= 8'b0;
+            weight_reg <= DATA_W'b0;
         end
         else if (load_weight) begin
             weight_reg <= weight_in;
@@ -34,8 +38,8 @@ module pe (
     // Systolic Pipeline
     always_ff @(posedge clk) begin
         if (reset) begin
-            a_out   <= 8'b0;
-            sum_out <= 32'b0;
+            a_out   <= DATA_W'b0;
+            sum_out <= SUM_W'b0;
         end 
         else begin 
             a_out <= a_in;
