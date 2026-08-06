@@ -24,7 +24,7 @@ This project uses a Golden Model Verification strategy
 - [SystemVerilog Testbenches](tb/): Self-checking testbenches read the vectors, feed them into the hardware simulation, and compares the ouputs to expected python results.
 
 # Quick Start
----
+
 ## Prerequisites:
 - Python 3 (with numpy)
 - Verilator
