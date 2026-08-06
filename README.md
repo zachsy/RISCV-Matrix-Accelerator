@@ -41,8 +41,8 @@ python3 scripts/generate_accelerator_tests.py
 ```
 3. Compile and run the simulation using Verilator
 ```
-verilator --binary --timing --trace -Wall rtl/accelerator/pe.sv rtl/accelerator/systolic_array.sv tb/tb_systolic_array.sv --top-module tb_systolic_array
-./obj_dir/Vtb_systolic_array
+verilator --binary --timing --trace -Wall --Mdir sim/obj_dir rtl/accelerator/pe.sv rtl/accelerator/systolic_array.sv tb/tb_systolic_array.sv --top-module tb_systolic_array
+./sim/obj_dir/Vtb_systolic_array
 ```
 
 4. View the waveforms
