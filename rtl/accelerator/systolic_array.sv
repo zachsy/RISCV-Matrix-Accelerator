@@ -1,7 +1,7 @@
 module systolic_array #(
     parameter int N = 4,        // Size of array
     parameter int DATA_W = 8,   // Width of A and W 
-    parameter int SUM_W = 32    // Width of accumulated sum
+    parameter int SUM_W = 32    // Width of accumulated sum. SUM_W ≥ 2 * DATA_W + ceil(log2(N))
 
 ) (
     input  logic               clk,
@@ -16,8 +16,8 @@ module systolic_array #(
     input  logic [DATA_W-1:0]       weight_in [N], 
     
     // Outputs (Flowing out the right and bottom)
-    output logic [DATA_W-1:0]       a_out     [N],   // Passed out the right side
-    output logic [SUM_W-1:0]        sum_out   [N]  // The final matrix answers out the bottom
+    output logic [DATA_W-1:0]       a_out     [N],      // Passed out the right side
+    output logic [SUM_W-1:0]        sum_out   [N]       // The final matrix answers out the bottom
 );
 
     logic [DATA_W-1:0] skew_reg [N][N - 1];
@@ -50,7 +50,7 @@ module systolic_array #(
     genvar r, c;
     generate
         for(r = 0; r < N; r++) begin
-            if(r > 0) begin
+            if(r > 0) begin : gen_skew_tap
                 assign a_wire[r][0] = skew_reg[r][r-1];
             end
             assign a_out[r] = a_wire[r][N];

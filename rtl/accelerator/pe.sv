@@ -24,7 +24,7 @@ module pe #(
     // Weight Loader
     always_ff @(posedge clk) begin
         if (reset) begin
-            weight_reg <= DATA_W'b0;
+            weight_reg <= '0;
         end
         else if (load_weight) begin
             weight_reg <= weight_in;
@@ -32,14 +32,14 @@ module pe #(
     end
 
     // MAC Math
-    logic [31:0] next_sum;
+    logic [SUM_W-1:0] next_sum;
         assign next_sum = ($signed(a_in) * $signed(weight_reg)) + $signed(sum_in);
 
     // Systolic Pipeline
     always_ff @(posedge clk) begin
         if (reset) begin
-            a_out   <= DATA_W'b0;
-            sum_out <= SUM_W'b0;
+            a_out   <= '0;
+            sum_out <= '0;
         end 
         else begin 
             a_out <= a_in;
