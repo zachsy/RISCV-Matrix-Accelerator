@@ -103,7 +103,7 @@ module tb_systolic_array();
 
                 if (cycle == 4*N - 1) begin
                     if(test == NUM_TESTS - 1) begin
-                        $display("%0d Total cycles completed. %0d Cycles-per-matrix", total_cycles, total_cycles/NUM_TESTS);
+                        $display("%0d Total cycles completed. %0d Cycles-per-matrix", total_cycles + 1, (total_cycles + 1)/NUM_TESTS);
                         if (errors == 0)
                             $display("SUCCESS: All tests completed perfectly!");
                         else
