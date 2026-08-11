@@ -1,4 +1,4 @@
-module tb_systolic_array();
+module tb_array_ws();
 
     localparam int N = 4;               // Size of NxN array. Should match rtl/accelerator/systolic_array.sv and scripts/generate_accelerator_tests.py
     localparam int DATA_W = 8;          // Width of A and W 

@@ -1,4 +1,4 @@
-module systolic_array #(
+module array_ws #(
     parameter int N = 4,        // Size of array
     parameter int DATA_W = 8,   // Width of A and W 
     parameter int SUM_W = 32    // Width of accumulated sum. SUM_W ≥ 2 * DATA_W + ceil(log2(N))
