@@ -26,7 +26,7 @@ module tb_array_ws();
     logic [DATA_W-1:0]         W_mat        [NUM_TESTS][N][N];
     logic [SUM_W-1:0]        C_expected   [NUM_TESTS][N][N];
 
-    systolic_array #(.N(N)) dut (
+    array_ws #(.N(N)) dut (
         .clk(clk), .reset(reset), .load_weight(load_weight),
         .a_in(a_in), .sum_in(sum_in), .weight_in(weight_in),
         .a_out(a_out), .sum_out(sum_out)

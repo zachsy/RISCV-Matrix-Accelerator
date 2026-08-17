@@ -64,7 +64,7 @@ module array_ws #(
 
         for (r = 0; r < N; r++) begin : row
             for (c = 0; c < N; c++) begin : col
-                pe pe_inst (
+                pe_ws pe_ws_inst (
                     .clk         (clk),
                     .reset       (reset),
                     .load_weight (load_weight),

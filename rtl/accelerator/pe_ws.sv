@@ -1,4 +1,4 @@
-module pe #(
+module pe_ws #(
     parameter int DATA_W = 8,   // Width of A and W 
     parameter int SUM_W = 32    // Width of accumulated sum
 
