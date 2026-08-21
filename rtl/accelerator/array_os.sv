@@ -17,8 +17,9 @@ module array_os #(
     // Outputs (Flowing out the right and bottom)
     output logic [DATA_W-1:0]       a_out     [N],      // Passed out the right side
     output logic [DATA_W-1:0]       w_out     [N],      // Passed out the bottom
-    output logic [SUM_W-1:0]        sum_out   [N][N],       // The final matrix answers out the bottom of each PE
+    output logic [SUM_W-1:0]        sum_out   [N][N]       // The final matrix answers out the bottom of each PE
 );
+
     logic load_wire [N][N]; 
     logic [DATA_W-1:0] a_skew_reg [N][N - 1];
     always_ff @(posedge clk) begin

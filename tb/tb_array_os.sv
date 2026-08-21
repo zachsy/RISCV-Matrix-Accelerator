@@ -56,13 +56,20 @@ module tb_array_os();
     // Driver
     always @(posedge clk) begin
         if (~reset) begin
+            start <= 0; 
+            for (int i = 0; i < N; i++) begin
+            a_in[i] <= '0;
+            w_in[i] <= '0;
+        end
             if (cycle < N) begin
-                start <= 1;
+                if (cycle == 0) begin 
+                    start <= 1;
+                end
                 for (int r = 0; r < N; r++) begin
-                    a_in[r] <= A_mat[test][cycle][r];
+                    a_in[r] <= A_mat[test][r][cycle];
                 end
                 for (int c = 0; c < N; c++) begin
-                    w_in[c] <= W_mat[test][c][cycle];
+                    w_in[c] <= W_mat[test][cycle][c];
                 end
             end
             total_cycles <= total_cycles + 1;
