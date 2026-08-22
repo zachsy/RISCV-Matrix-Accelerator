@@ -24,7 +24,7 @@ module tb_array_ws();
     // Golden-model storage
     logic [DATA_W-1:0]         A_mat        [NUM_TESTS][N][N];
     logic [DATA_W-1:0]         W_mat        [NUM_TESTS][N][N];
-    logic [SUM_W-1:0]        C_expected   [NUM_TESTS][N][N];
+    logic [SUM_W-1:0]          C_expected   [NUM_TESTS][N][N];
 
     array_ws #(.N(N)) dut (
         .clk(clk), .reset(reset), .load_weight(load_weight),
@@ -43,8 +43,8 @@ module tb_array_ws();
         $readmemh("sim/W.tv", W_mat);
         $readmemh("sim/C.tv", C_expected);
 
-        $dumpfile("sim/systolic_waves.vcd");
-        $dumpvars(0, tb_systolic_array);
+        $dumpfile("sim/array_ws_waves.vcd");
+        $dumpvars(0, tb_array_ws);
 
         for (int i = 0; i < N; i++) begin
             sum_in[i] = 'd0;

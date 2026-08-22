@@ -9,7 +9,7 @@ A parameterized weight-stationary systolic-array matrix accelerator and RISC-V d
 This project is divided into two tracks: A Matrix Accelerator Block and a RISC-V ALU
 
 ## 1. Matrix Accelerator
-Computes matrix multiplication (C = A x W) with a weight-stationary systolic array.
+Computes matrix multiplication (C = A x W) with a weight-stationary and output-stationary systolic array.
 - [Processing Element](rtl/accelerator/pe.sv): Each PE performs a Multiply-Accumulate (MAC) operation. It holds a DATA_W-bit weight, multiplies it by an incoming DATA_W-bit activation, adds it to a SUM_W-bit incoming partial sum, and pipelines the results to adjacent PEs.
 
 - [Systolic Array](rtl/accelerator/systolic_array.sv): An N×N grid of PEs. It staggers the incoming rows of Matrix A, in order for data to arrive at the correct PEs at the exact right clock cycle.
@@ -42,19 +42,33 @@ git clone https://github.com/zachsy/RISCV-Matrix-Accelerator.git
 ```
 python3 scripts/generate_accelerator_tests.py
 ```
+
+The arrays can be computed using a Weight-Stationary or an Output-Stationary Systolic array
+### To use the Weight-Stationary Systoilc array
+
 3. Compile and run the simulation using Verilator
 ```
-verilator --binary --timing --trace -Wall --Mdir sim/obj_dir rtl/accelerator/pe.sv rtl/accelerator/systolic_array.sv tb/tb_systolic_array.sv --top-module tb_systolic_array
-./sim/obj_dir/Vtb_systolic_array
+verilator --binary --timing --trace -Wall --Mdir sim/obj_dir rtl/accelerator/pe_ws.sv rtl/accelerator/array_ws.sv tb/tb_array_ws.sv --top-module tb_array_ws
+./sim/obj_dir/Vtb_array_ws
 ```
 
 4. View the waveforms
 ```
-gtkwave sim/systolic_waves.vcd
+gtkwave sim/array_ws_waves.vcd
+```
+### To use the Output-Stationary Systolic array
+3. Compile and run the simulation using Verilator
+```
+verilator --binary --timing --trace -Wall --Mdir sim/obj_dir   rtl/accelerator/pe_os.sv rtl/accelerator/array_os.sv tb/tb_array_os.sv   --top-module tb_array_os
+./sim/obj_dir/Vtb_array_os
+```
+
+4. View the waveforms
+```
+gtkwave sim/array_os_waves.vcd
 ```
 
 # In progress:
-1. Output-Stationary Systolic Array
-2. Vivado Tcl scripts to automate the batched synthesis and implementation runs across different seeds.
-3. Extracting and plotting DSP/FF utilization, $F_{max}$ and latency.
+1. Vivado Tcl scripts to automate the batched synthesis and implementation runs across different seeds.
+2. Extracting and plotting DSP/FF utilization, $F_{max}$ and latency.
 See more in the [Experiment Plan](docs/experiment_plan.md).

@@ -1,6 +1,6 @@
 module pe_os #(
     parameter int DATA_W = 8,   // Width of A and W 
-    parameter int sum_out_W = 32    // Width of accumulated sum_out
+    parameter int SUM_W  = 32    // Width of accumulated sum_out
 
 )   (
     input  logic        clk,
@@ -17,7 +17,7 @@ module pe_os #(
 
     output logic [DATA_W-1:0]   w_out,
     output logic [DATA_W-1:0]   a_out,
-    output logic [sum_out_W-1:0]    sum_out
+    output logic [SUM_W-1:0]    sum_out
 );
  
     logic load;
@@ -29,7 +29,7 @@ module pe_os #(
             a_out       <= '0;
             w_out       <= '0;
             load_out    <= '0;
-            sum_out_out         <= '0;
+            sum_out     <= '0;
         end 
         else begin 
             a_out       <= a_in;

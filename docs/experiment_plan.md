@@ -6,10 +6,9 @@
 
 ## Dependent Variables
     DSP utilization
+    FF utilization
     $F_{max}$
     Latency
-    Resource Cost.
-
 
 ## Constants
     FPGA Board: Arty A7 100T XC7A100TCSG324-1
@@ -21,11 +20,11 @@
 ## Hypothesis
 
 1. **Resource utilization (DSP/LUT vs. N).**
-    If array size $N$ grows from 2 to 16, then DSP usage scales as $O(N^2)$ until it saturates at the 240-slice limit, forcing LUT usage to spike sharply at $N=16$ because the XC7A100T contains 240 DSP48E1 slices (DS180). The tool must build overflow PEs from LUTs. While DSP utilization will not be affected by precision, LUT utilization will. This means at $N = 16$ resource utilization will be expected to vary signicantly depending on data width but will have little effect for smaller $N$.
+    If array size $N$ grows from 2 to 16, then DSP usage scales as $O(N^2)$ until it saturates at the 240-slice limit, forcing LUT usage to spike sharply at $N=16$ because the XC7A100T contains 240 DSP48E1 slices (DS180). Assuming 1 DSP48E1 per PE, at N = 16, 256 DSPs will be reqiuried, 16 less than the 240 physically avaiable on the board. The tool must build overflow PEs from LUTs. While DSP utilization will not be affected by precision, LUT utilization will. This means at $N = 16$ resource utilization will be expected to vary significantly depending on data width but will have little effect for smaller $N$.
     Tested by: line plot of DSP and LUT utilization vs. $N$.
 
-2. **Clock Freduency (Fmax vs. N).**
-    $F_{max}$ is roughly flat for smal $N$ and drops sharply at $N = 16$ because the XC7A100T contains 240 DSP48E1 slices (DS180) so the synthesis tool must build the rest of the PEs using LUTs which intrudecs physical rounting delays into the critical path. 
+2. **Clock Frequency (Fmax vs. N).**
+    $F_{max}$ is roughly flat for small $N$ and drops sharply at $N = 16$ because the XC7A100T contains 240 DSP48E1 slices (DS180) so the synthesis tool must build the rest of the PEs using LUTs which introduces physical routing delays into the critical path. Different data precision will not have any impact on $F_{max}$
     Tested by: line graph of $F_{max} vs. $N$.
 
 3. **Latency (Clock Cycles vs. Array Size)**
@@ -33,5 +32,5 @@
     Tested by: line graph of clock cycles vs $N$.
 
 4. **Pareto Frontier (Latency vs. Resource Cost)t**
-    If array size, precision, and workload are held constant and the dataflow switches from weight-stationary to output-stationary, then total FF usage will be nearly equal between the two. OS will consume modestly more LUTs, because it requires a draining to extract the computed array, whereas WS results exit the array bottom without a deditcated drain network. This LUT gap is expected to widen with precision, since the drain datapath scales with SUM_W. However, OS's inter-PE buses are only DATA_W-wide versus WS's SUM_W-wide partial-sum buses, which could reduce OS routing/logic and shrink or reverse the gap. 
+    If array size, precision, and workload are held constant and the dataflow switches from weight-stationary to output-stationary, then total FF usage will be nearly equal between the two. OS will consume modestly more LUTs, because it requires a draining to extract the computed array, whereas WS results exit the array bottom without a dedicated drain network. This LUT gap is expected to widen with precision, since the drain datapath scales with SUM_W. However, OS's inter-PE buses are only DATA_W-wide versus WS's SUM_W-wide partial-sum buses, which could reduce OS routing/logic and shrink or reverse the gap. Latency between the two dataflows will be roughly the same. 
     Tested by: FF and LUT series on the resource-vs-N plot, plus the WS/OS point separation on the Pareto scatter.

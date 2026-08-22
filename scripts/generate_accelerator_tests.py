@@ -1,8 +1,10 @@
 import numpy as np
 
-
-arraySize = 4 # Changed depending on size of array. Should match 'int N' in systolic_array.sv and tb_systolic_array.sv
-num_tests = 1000 # Number of random tests not including edge case testing.
+# KNOBS
+arraySize = 4       # Changed depending on size of array. Should match 'int N' in systolic_array.sv and tb_systolic_array.sv
+num_tests = 1000    # Number of random tests not including edge case testing.
+data_W    = 8       # Bit width of A and W elements (e.g. INT4=4, INT8=8, INT16=16)
+sum_W     = 32      # Bit width of accumulated C elements (must be >= 2*DATA_W + ceil(log2(N)))
 
 with open("sim/A.tv", "w") as fa, open("sim/W.tv", "w") as fw, open("sim/C.tv", "w") as fc:
     total_tests = 0
