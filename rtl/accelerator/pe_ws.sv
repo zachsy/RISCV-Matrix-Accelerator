@@ -1,7 +1,7 @@
 module pe_ws #(
-    parameter int DATA_W = 8,   // Width of A and W 
-    parameter int SUM_W = 32    // Width of accumulated sum
-
+    parameter int DATA_W,   // Width of A and W
+    parameter int SUM_W     // Width of accumulated sum
+    
 )   (
     input  logic        clk,
     input  logic        reset,
@@ -9,15 +9,14 @@ module pe_ws #(
     // Control Signal
     input  logic        load_weight, 
     
-    input  logic [DATA_W-1:0]  a_in,
-    input  logic [SUM_W-1:0] sum_in,
-    input  logic [DATA_W-1:0]  weight_in,
+    input  logic [DATA_W-1:0]   a_in,
+    input  logic [SUM_W-1:0]    sum_in,
+    input  logic [DATA_W-1:0]   weight_in,
     
-    output logic [DATA_W-1:0]  weight_out,
-    output logic [DATA_W-1:0]  a_out,
-    output logic [SUM_W-1:0] sum_out
+    output logic [DATA_W-1:0]   weight_out,
+    output logic [DATA_W-1:0]   a_out,
+    output logic [SUM_W-1:0]    sum_out
 );
-
 
     logic [DATA_W-1:0] weight_reg;
     
@@ -42,7 +41,7 @@ module pe_ws #(
             sum_out <= '0;
         end 
         else begin 
-            a_out <= a_in;
+            a_out   <= a_in;
             sum_out <= next_sum;
         end
     end

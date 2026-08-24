@@ -1,8 +1,7 @@
 module array_ws #(
-    parameter int N = 4,        // Size of array
-    parameter int DATA_W = 8,   // Width of A and W 
-    parameter int SUM_W = 32    // Width of accumulated sum. SUM_W ≥ 2 * DATA_W + ceil(log2(N))
-
+    parameter int N,        // Size of array
+    parameter int DATA_W,   // Width of A and W 
+    parameter int SUM_W    // Width of accumulated sum
 ) (
     input  logic               clk,
     input  logic               reset,
@@ -64,7 +63,7 @@ module array_ws #(
 
         for (r = 0; r < N; r++) begin : row
             for (c = 0; c < N; c++) begin : col
-                pe_ws pe_ws_inst (
+                pe_ws #(.DATA_W(DATA_W), .SUM_W(SUM_W))pe_ws_inst (
                     .clk         (clk),
                     .reset       (reset),
                     .load_weight (load_weight),

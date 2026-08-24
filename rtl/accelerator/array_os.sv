@@ -1,7 +1,8 @@
 module array_os #(
-    parameter int N = 4,        // Size of array
-    parameter int DATA_W = 8,   // Width of A and W 
-    parameter int SUM_W = 32    // Width of accumulated sum. SUM_W ≥ 2 * DATA_W + ceil(log2(N))
+    parameter int N,        // Size of array
+    parameter int DATA_W,   // Width of A and W 
+    parameter int SUM_W     // Width of accumulated sum
+
 
 ) (
     input  logic            clk,
@@ -17,8 +18,8 @@ module array_os #(
     // Outputs (Flowing out the right and bottom)
     output logic [DATA_W-1:0]       a_out     [N],      // Passed out the right side
     output logic [DATA_W-1:0]       w_out     [N],      // Passed out the bottom
-    output logic [SUM_W-1:0]        sum_out   [N][N]       // The final matrix answers out the bottom of each PE
-);
+    output logic [SUM_W-1:0]        sum_out   [N][N]    // The final matrix answers out the bottom of each PE
+);       
 
     logic load_wire [N][N]; 
     logic [DATA_W-1:0] a_skew_reg [N][N - 1];
@@ -87,7 +88,7 @@ module array_os #(
 
         for (r = 0; r < N; r++) begin : row
             for (c = 0; c < N; c++) begin : col
-                pe_os pe_os_inst (
+                pe_os #(.DATA_W(DATA_W), .SUM_W(SUM_W)) pe_os_inst (
                     .clk            (clk),
                     .reset          (reset),
                     .load_top_in    ((r==0) ? 0 : load_wire[r-1][c]),
