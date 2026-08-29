@@ -1,15 +1,24 @@
 import numpy as np
+import argparse
 
-# KNOBS
-arraySize = 4                                       # Changed depending on size of array. Should match 'int N' in systolic_array.sv and tb_systolic_array.sv
-num_tests = 1000                                    # Number of random tests not including edge case testing.
-data_W    = 8                                       # Bit width of A and W elements (e.g. INT4=4, INT8=8, INT16=16)
+# Parser
+p = argparse.ArgumentParser()
+p.add_argument("--num_tests", type=int, default=1000)
+p.add_argument("--n",         type=int, default=4)
+p.add_argument("--data_w",    type=int, default=8)
+args = p.parse_args()
+
+# Knobs
+num_tests = args.num_tests
+arraySize = args.n
+data_W    = args.data_w
+
 sum_W = 2*data_W + (arraySize - 1).bit_length()     # Bit width of accumulated C elements (must be >= 2*DATA_W + ceil(log2(N)))
 
 def fileWrite(mat, file, bitWidth):
+    hexWidth = (bitWidth + 3) // 4
+    mask = (1 << bitWidth) - 1
     for val in mat.flatten():
-        hexWidth = (bitWidth + 3) // 4
-        mask = (1 << bitWidth) - 1
         file.write(f"{val & mask:0{hexWidth}x} ")
     file.write("\n")
     return
