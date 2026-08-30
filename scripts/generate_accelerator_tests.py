@@ -3,13 +3,13 @@ import argparse
 
 # Parser
 p = argparse.ArgumentParser()
-p.add_argument("--num_tests", type=int, default=1000)
+p.add_argument("--rand_tests", type=int, default=1000)
 p.add_argument("--n",         type=int, default=4)
 p.add_argument("--data_w",    type=int, default=8)
 args = p.parse_args()
 
 # Knobs
-num_tests = args.num_tests
+rand_tests = args.rand_tests
 arraySize = args.n
 data_W    = args.data_w
 
@@ -54,7 +54,7 @@ with open("sim/A.tv", "w") as fa, open("sim/W.tv", "w") as fw, open("sim/C.tv", 
     
 
     # Random Testing:     
-    for _ in range(num_tests):
+    for _ in range(rand_tests):
         a = np.random.randint(-(2**(data_W-1)), (2**(data_W-1)), (arraySize, arraySize))
         w = np.random.randint(-(2**(data_W-1)), (2**(data_W-1)), (arraySize, arraySize))
 

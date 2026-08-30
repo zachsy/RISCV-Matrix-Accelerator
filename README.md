@@ -10,9 +10,9 @@ This project is divided into two tracks: A Matrix Accelerator Block and a RISC-V
 
 ## 1. Matrix Accelerator
 Computes matrix multiplication (C = A x W) with a weight-stationary and output-stationary systolic array.
-- [Processing Element](rtl/accelerator/pe.sv): Each PE performs a Multiply-Accumulate (MAC) operation. It holds a DATA_W-bit weight, multiplies it by an incoming DATA_W-bit activation, adds it to a SUM_W-bit incoming partial sum, and pipelines the results to adjacent PEs.
+- [Processing Element](rtl/accelerator/pe_ws.sv): Each PE performs a Multiply-Accumulate (MAC) operation. It holds a DATA_W-bit weight, multiplies it by an incoming DATA_W-bit activation, adds it to a SUM_W-bit incoming partial sum, and pipelines the results to adjacent PEs.
 
-- [Systolic Array](rtl/accelerator/systolic_array.sv): An N×N grid of PEs. It staggers the incoming rows of Matrix A, in order for data to arrive at the correct PEs at the exact right clock cycle.
+- [Systolic Array](rtl/accelerator/array_ws.sv): An N×N grid of PEs. It staggers the incoming rows of Matrix A, in order for data to arrive at the correct PEs at the exact right clock cycle.
 
 - Scalable: The parameter N allows the array to be synthesized for any size (e.g., 4x4, 16x16) at compile time. The paramater DATA_W and SUM_W allows the data to scale to any bit width.
 
@@ -33,39 +33,18 @@ This project uses a Golden Model Verification strategy
 - Verilator
 - GTKWave (optional, for viewing .vcd waveforms)
 
-## Running the Matrix Accelerator Simulation
+## Quickstart
 1. Clone the repository
 ``` 
 git clone https://github.com/zachsy/RISCV-Matrix-Accelerator.git
 ```
-2. Generate the test matrices
+2. Run the simulation using Verlitor
 ```
-python3 scripts/generate_accelerator_tests.py
+make simulate
 ```
-
-The arrays can be computed using a Weight-Stationary or an Output-Stationary Systolic array
-### To use the Weight-Stationary Systoilc array
-
-3. Compile and run the simulation using Verilator
+3. View the waveforms
 ```
-verilator --binary --timing --trace -Wall --Mdir sim/obj_dir rtl/accelerator/pe_ws.sv rtl/accelerator/array_ws.sv tb/tb_array_ws.sv --top-module tb_array_ws
-./sim/obj_dir/Vtb_array_ws
-```
-
-4. View the waveforms
-```
-gtkwave sim/array_ws_waves.vcd
-```
-### To use the Output-Stationary Systolic array
-3. Compile and run the simulation using Verilator
-```
-verilator --binary --timing --trace -Wall --Mdir sim/obj_dir   rtl/accelerator/pe_os.sv rtl/accelerator/array_os.sv tb/tb_array_os.sv   --top-module tb_array_os
-./sim/obj_dir/Vtb_array_os
-```
-
-4. View the waveforms
-```
-gtkwave sim/array_os_waves.vcd
+make waves
 ```
 
 # In progress:
