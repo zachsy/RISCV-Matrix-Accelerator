@@ -4,6 +4,7 @@ DATAFLOW 	?= ws
 RAND_TESTS 	?= 1000
 
 NUM_TESTS := $(shell echo $$(( $(RAND_TESTS) + 5 )))
+SUM_W := $(shell python3 -c "print (2 * $(DATA_W)+ ($(N) - 1).bit_length())")
 
 ifeq ($(DATAFLOW), ws)
 	BUILD = verilator --binary --timing --trace -Wall --Mdir sim/obj_dir rtl/accelerator/pe_ws.sv rtl/accelerator/array_ws.sv tb/tb_array_ws.sv --top-module tb_array_ws
@@ -16,10 +17,10 @@ else
 endif
 
 gen:
-	python3 scripts/generate_accelerator_tests.py --n $(N) --data_w $(DATA_W) --rand_tests $(RAND_TESTS)
+	python3 scripts/generate_accelerator_tests.py --n $(N) --data_w $(DATA_W) --rand_tests $(RAND_TESTS) --sum_w $(SUM_W)
 
 simulate: gen
-	$(BUILD) -GN=$(N) -GDATA_W=$(DATA_W) -GNUM_TESTS=$(NUM_TESTS)
+	$(BUILD) -GN=$(N) -GDATA_W=$(DATA_W) -GNUM_TESTS=$(NUM_TESTS) -GSUM_W=$(SUM_W)
 	$(SIM)
 
 waves: 

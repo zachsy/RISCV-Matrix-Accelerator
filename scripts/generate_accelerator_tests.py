@@ -3,17 +3,17 @@ import argparse
 
 # Parser
 p = argparse.ArgumentParser()
-p.add_argument("--rand_tests", type=int, default=1000)
-p.add_argument("--n",         type=int, default=4)
-p.add_argument("--data_w",    type=int, default=8)
+p.add_argument("--rand_tests",  type=int, default=1000)
+p.add_argument("--n",           type=int, default=4)
+p.add_argument("--data_w",      type=int, default=8)
+p.add_argument("--sum_w",       type=int, default=32)
 args = p.parse_args()
 
 # Knobs
-rand_tests = args.rand_tests
-arraySize = args.n
-data_W    = args.data_w
-
-sum_W = 2*data_W + (arraySize - 1).bit_length()     # Bit width of accumulated C elements (must be >= 2*DATA_W + ceil(log2(N)))
+rand_tests  = args.rand_tests
+arraySize   = args.n
+data_W      = args.data_w
+sum_W       = args.sum_w
 
 def fileWrite(mat, file, bitWidth):
     hexWidth = (bitWidth + 3) // 4
