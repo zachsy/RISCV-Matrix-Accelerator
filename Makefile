@@ -28,3 +28,6 @@ waves:
 
 clean:
 	rm -rf sim/obj_dir sim/*.tv sim/*.vcd
+
+build:
+	vivado -mode batch -source flow/build.tcl -tclargs $(N) $(DATA_W) $(SUM_W) $(DATAFLOW) $(SEED)
