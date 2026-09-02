@@ -6,7 +6,7 @@ p = argparse.ArgumentParser()
 p.add_argument("--rand_tests",  type=int, default=1000)
 p.add_argument("--n",           type=int, default=4)
 p.add_argument("--data_w",      type=int, default=8)
-p.add_argument("--sum_w",       type=int, default=32)
+p.add_argument("--sum_w",       type=int, default=18)
 args = p.parse_args()
 
 # Knobs
