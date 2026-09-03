@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 N			?= 4
 DATA_W 		?= 8
 DATAFLOW 	?= ws
@@ -29,5 +31,8 @@ waves:
 clean:
 	rm -rf sim/obj_dir sim/*.tv sim/*.vcd
 
-build:
-	vivado -mode batch -source flow/build.tcl -tclargs $(N) $(DATA_W) $(SUM_W) $(DATAFLOW) $(SEED)
+VIVADO_SETTINGS := /home/zsl5911/2026.1/Vivado/settings64.sh
+SEED ?= 1
+
+synth:
+	source $(VIVADO_SETTINGS) &&  vivado -mode batch -source flow/build.tcl -tclargs $(N) $(DATA_W) $(SUM_W) $(DATAFLOW) $(SEED)

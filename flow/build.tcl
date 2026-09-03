@@ -1,5 +1,8 @@
 lassign $argv N DATA_W SUM_W DATAFLOW seed
 
+set outdir build/N${N}_DW${DATA_W}_${DATAFLOW}_s${seed}
+file mkdir $outdir
+
 read_verilog rtl/accelerator/pe_$DATAFLOW.sv
 read_verilog rtl/accelerator/array_$DATAFLOW.sv
 read_xdc constraints/constraints.xdc

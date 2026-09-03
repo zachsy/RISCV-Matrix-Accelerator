@@ -6,3 +6,10 @@ sim/*
 
 .vscode
 .venv
+.Xil
+
+# Ignore Vivado log files
+build/
+*.jou
+*.log
+clockInfo.txt
