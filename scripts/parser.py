@@ -1,11 +1,14 @@
+PERIOD_NS   = 6.667
 lut         = None
 flip_flop   = None
 bram        = None
 dsp         = None
-fmax        = None
+fmax_mhz    = None
 
 with open("build/util.rpt", "r") as util:
     for line in util:
+        if "|" not in line:
+            continue
         if "Slice LUTs" in line:    
             parts = line.split("|")
             lut = int(parts[2].strip())
@@ -15,21 +18,14 @@ with open("build/util.rpt", "r") as util:
         if "Block RAM Tile" in line:
             parts = line.split("|")
             bram = int(parts[2].strip())
-            break
         if "DSPs" in line:
             parts = line.split("|")
             dsp = int(parts[2].strip())
-            break
-
-print (lut)
-print (flip_flop)
-print (bram)
-print (dsp)
 
 with open("build/timing.rpt", "r") as timing:
     for line in timing: 
         if "Worst Slack" in line:
             parts = line.split()
-            wns = str(parts[7].strip())
-            print(wns)
+            wns = float(parts[7].strip().rstrip("ns,"))   # '-0.531ns,' -> -0.531
+            fmax_mhz  = 1000.0 / (PERIOD_NS - wns)
             break
