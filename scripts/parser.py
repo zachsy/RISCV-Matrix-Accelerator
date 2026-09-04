@@ -9,7 +9,25 @@ bram        = None
 dsp         = None
 fmax_mhz    = None
 
-with open("build/util.rpt", "r") as util:
+p = argparse.ArgumentParser()
+p.add_argument("--n",           type=int, default=4)
+p.add_argument("--data_w",      type=int, default=8)
+p.add_argument("--sum_w",       type=int, default=18)
+p.add_argument("--seed",        type=int, default= 1)
+p.add_argument("--dataflow",    type=str, default='ws')
+
+p.add_argument("--indir",       type=str, default= 'build')
+args = p.parse_args()
+
+n           = args.n
+data_W      = args.data_w
+sum_W       = args.sum_w
+dataflow    = args.dataflow
+seed        = args.seed
+
+
+
+with open(f"{args.indir}/util.rpt", "r") as util:
     for line in util:
         if "|" not in line:
             continue
@@ -26,7 +44,7 @@ with open("build/util.rpt", "r") as util:
             parts = line.split("|")
             dsp = int(parts[2].strip())
 
-with open("build/timing.rpt", "r") as timing:
+with open(f"{args.indir}/timing.rpt", "r") as timing:
     for line in timing: 
         if "Worst Slack" in line:
             parts = line.split()
@@ -34,25 +52,12 @@ with open("build/timing.rpt", "r") as timing:
             fmax_mhz  = 1000.0 / (PERIOD_NS - wns)
             break
 
-
-p = argparse.ArgumentParser()
-p.add_argument("--n",           type=int, default=4)
-p.add_argument("--data_w",      type=int, default=8)
-p.add_argument("--sum_w",       type=int, default=18)
-p.add_argument("--dataflow",    type=str, default='ws')
-args = p.parse_args()
-
-n   = args.n
-data_W      = args.data_w
-sum_W       = args.sum_w
-dataflow    = args.dataflow
-
-data_order = [n, dataflow, data_W, sum_W, lut, flip_flop, bram, dsp, fmax_mhz]
+data_order = [n, dataflow, data_W, sum_W, seed, lut, flip_flop, bram, dsp, fmax_mhz]
 
 with open('results/results.csv', 'a', newline='') as r:
     writer = csv.writer(r)
 
     if os.stat('results/results.csv').st_size == 0:
-        writer.writerow(['Array Size', 'Dataflow', 'Data Width', 'Sum Width', 'LUTs', 'FFs', 'BRAM', 'DSP', 'Fmax (MHz)'])
+        writer.writerow(['Array Size', 'Dataflow', 'Data Width', 'Sum Width', 'Seed', 'LUTs', 'FFs', 'BRAM', 'DSP', 'Fmax (MHz)'])
 
     writer.writerow(data_order)

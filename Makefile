@@ -34,5 +34,8 @@ clean:
 VIVADO_SETTINGS := /home/zsl5911/2026.1/Vivado/settings64.sh
 SEED ?= 1
 
+OUTDIR = build/N${N}_DW${DATA_W}_${DATAFLOW}_s${SEED}
+
 synth:
-	source $(VIVADO_SETTINGS) &&  vivado -mode batch -source flow/build.tcl -tclargs $(N) $(DATA_W) $(SUM_W) $(DATAFLOW) $(SEED)
+	source $(VIVADO_SETTINGS) &&  vivado -mode batch -source flow/build.tcl -tclargs $(N) $(DATA_W) $(SUM_W) $(DATAFLOW) $(SEED) $(OUTDIR)
+	python3 scripts/parser.py --n $(N) --data_w $(DATA_W) --sum_w $(SUM_W) --seed $(SEED) --indir $(OUTDIR)

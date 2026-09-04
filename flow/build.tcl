@@ -1,6 +1,5 @@
-lassign $argv N DATA_W SUM_W DATAFLOW seed
+lassign $argv N DATA_W SUM_W DATAFLOW seed outdir
 
-set outdir build/N${N}_DW${DATA_W}_${DATAFLOW}_s${seed}
 file mkdir $outdir
 
 read_verilog rtl/accelerator/pe_$DATAFLOW.sv
@@ -13,6 +12,6 @@ opt_design
 place_design
 route_design
 
-report_utilization    -file build/util.rpt
-report_timing_summary -file build/timing.rpt
-report_power          -file build/power.rpt
+report_utilization    -file $outdir/util.rpt
+report_timing_summary -file $outdir/timing.rpt
+report_power          -file $outdir/power.rpt
