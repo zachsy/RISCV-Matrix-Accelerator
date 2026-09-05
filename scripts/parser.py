@@ -48,7 +48,11 @@ with open(f"{args.indir}/timing.rpt", "r") as timing:
     for line in timing: 
         if "Worst Slack" in line:
             parts = line.split()
-            wns = float(parts[7].strip().rstrip("ns,"))   # '-0.531ns,' -> -0.531
+            if parts[2] == '1':
+                wns = float(parts[8].strip().rstrip("ns,")) # When Failing Endpoint is 1, index of worst slack is different due to an extra space (' '). 
+                                                            # See build/N2_DW8_os_s1/timing.rpt
+            else:
+                wns = float(parts[7].strip().rstrip("ns,"))
             fmax_mhz  = 1000.0 / (PERIOD_NS - wns)
             break
 
