@@ -1,2 +1,2 @@
-Array Size,Dataflow,Data Width,Sum Width,LUTs,FFs,BRAM,DSP,Fmax (MHz)
-4,ws,8,18,1348,592,0,0,138.92747985551543
+Array Size,Dataflow,Data Width,Sum Width,Seed,LUTs,FFs,BRAM,DSP,Fmax (MHz)
+4,ws,8,18,1,1348,592,0,0,138.92747985551543

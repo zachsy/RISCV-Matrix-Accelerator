@@ -39,3 +39,12 @@ OUTDIR = build/N${N}_DW${DATA_W}_${DATAFLOW}_s${SEED}
 synth:
 	source $(VIVADO_SETTINGS) &&  vivado -mode batch -source flow/build.tcl -tclargs $(N) $(DATA_W) $(SUM_W) $(DATAFLOW) $(SEED) $(OUTDIR)
 	python3 scripts/parser.py --n $(N) --data_w $(DATA_W) --sum_w $(SUM_W) --seed $(SEED) --indir $(OUTDIR)
+
+sweep: 
+	for df in ws os; do \
+		for n in 2 4 8 12 16; do \
+			for dw in 4 8 16; do \
+				$(MAKE) synth N=${n} DATA_W=${dw} DATAFLOW=${df}; \
+			done; \
+		done; \
+	done 
